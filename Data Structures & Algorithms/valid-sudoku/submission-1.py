@@ -1,0 +1,40 @@
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        length = len(board)
+
+        def check_for_dup(arr: List[str]):
+            nums = [num for num in arr if num.isnumeric()]
+            if len(nums) != len(set(nums)):
+                return False
+            return True
+    
+        # Rows
+        for row in board:
+            if not check_for_dup(row):
+                return False
+            
+        # Columns
+        cols = [[board[j][i] for j in range(length)] for i in range(length)]
+        for col in cols:
+            if not check_for_dup(col):
+                return False
+        
+        # Sub-boxes
+        for row in range(length):
+            for col in range(length):
+                if row in [1, 4, 7] and col in [1, 4, 7]:
+                    sub_box = [
+                        board[row - 1][col - 1],
+                        board[row - 1][col],
+                        board[row - 1][col + 1],
+                        board[row][col - 1],
+                        board[row][col],
+                        board[row][col + 1],
+                        board[row + 1][col - 1],
+                        board[row + 1][col],
+                        board[row + 1][col + 1],
+                    ]
+                    if not check_for_dup(sub_box):
+                        return False
+        
+        return True
